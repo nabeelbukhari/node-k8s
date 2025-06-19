@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Server Benchmark</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <details id="single-bench-details" open>
+        <summary>
+            <h1 style="display:inline">Node.js Server Benchmark</h1>
+        </summary>
+        <div class="container" id="single-bench-container">
+            <form id="benchmark-form">
+                <label for="serverType">Server Type:</label>
+                <select id="serverType" name="serverType"></select>
+                <label for="loadType">Load Type:</label>
+                <select id="loadType" name="loadType"></select>
+                <label for="latencyThreshold">Latency Threshold (ms):</label>
+                <input type="number" id="latencyThreshold" name="latencyThreshold" min="1" value="1000" />
+                <label for="duration">Duration (seconds):</label>
+                <input type="number" id="duration" name="duration" min="1" value="30" />
+                <label for="connections">Simultaneous Connections:</label>
+                <input type="number" id="connections" name="connections" min="1" value="10" />
+                <label for="warmupSeconds">Warmup Duration (seconds):</label>
+                <input type="number" id="warmupSeconds" name="warmupSeconds" min="0" value="7" />
+                <button type="submit">Run Benchmark</button>
+            </form>
+            <pre id="output"></pre>
+        </div>
+    </details>
+    <details id="batch-bench-details" open>
+        <summary>
+            <h2 style="display:inline">Batch Benchmark: All Load Types</h2>
+        </summary>
+        <div class="container" id="batch-bench-container">
+            <form id="batch-benchmark-form">
+                <label for="batchServerType">Server Type:</label>
+                <select id="batchServerType" name="batchServerType"></select>
+                <label for="batchLatencyThreshold">Latency Threshold (ms):</label>
+                <input type="number" id="batchLatencyThreshold" name="batchLatencyThreshold" min="1" value="1000" />
+                <label for="batchDuration">Duration (seconds):</label>
+                <input type="number" id="batchDuration" name="batchDuration" min="1" value="30" />
+                <label for="batchConnections">Simultaneous Connections:</label>
+                <input type="number" id="batchConnections" name="batchConnections" min="1" value="10" />
+                <label for="batchWarmupSeconds">Warmup Duration (seconds):</label>
+                <input type="number" id="batchWarmupSeconds" name="batchWarmupSeconds" min="0" value="7" />
+                <button type="submit">Run All Load Types</button>
+            </form>
+            <pre id="batchOutput"></pre>
+        </div>
+    </details>
+    <script src="main.js"></script>
+</body>
+
+</html>
