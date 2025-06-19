@@ -1,0 +1,19 @@
+{
+  "name": "node-in-k8s",
+  "version": "1.0.0",
+  "description": "This repo contains code examples of node behavior in k8s",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "benchmark": "node src/benchmark.js",
+    "start:web": "node src/web-ui.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autocannon": "^8.0.0",
+    "express": "^5.1.0",
+    "inquirer": "^12.6.3"
+  }
+}
