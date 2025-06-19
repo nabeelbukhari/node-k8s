@@ -52,3 +52,150 @@ pre#output {
   font-size: 1rem;
   overflow-x: auto;
 }
+.benchmark-section {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.benchmark-section h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.benchmark-form label {
+  font-weight: 500;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+  display: block;
+  position: relative;
+}
+.benchmark-form input,
+.benchmark-form select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+.benchmark-form input:focus,
+.benchmark-form select:focus {
+  border: 1.5px solid #0078d4;
+  outline: none;
+}
+.run-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.run-btn:disabled,
+.run-btn.running {
+  background: #dc3545;
+  cursor: not-allowed;
+}
+.run-btn:hover:not(:disabled):not(.running) {
+  background: #005fa3;
+}
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.tooltip {
+  display: inline-block;
+  margin-left: 6px;
+  color: #888;
+  cursor: help;
+  font-size: 1rem;
+  border-bottom: 1px dotted #888;
+  position: relative;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 220px;
+  background: #222;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px 12px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  pointer-events: none;
+}
+.tooltip:hover .tooltiptext,
+.tooltip:focus .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+.tooltip .tooltiptext::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #222 transparent transparent transparent;
+}
+.results-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  padding: 1.25rem 1rem;
+  margin-top: 1.5rem;
+}
+.output-label {
+  margin-top: 0;
+  font-weight: 600;
+  display: block;
+}
+.output-area {
+  width: 100%;
+  min-height: 120px;
+  font-family: monospace;
+  margin-top: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 0.75rem;
+  resize: vertical;
+  background: #f8f9fa;
+}
+@media (max-width: 600px) {
+  .benchmark-section {
+    padding: 1rem;
+    max-width: 98vw;
+  }
+}
