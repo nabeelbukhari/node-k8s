@@ -209,20 +209,31 @@ async function runPhase({ url, connections, duration, load, phaseName }) {
 
 // Helper to extract human-readable summary stats from autocannon result
 function extractSummary(result) {
+    return result;
     if (!result || typeof result !== 'object') return result;
+    // Defensive: ensure all percentiles are present, set to null if missing
+    const latency = result.latency || {};
+    const requests = result.requests || {};
+    const throughput = result.throughput || {};
     return {
-        averageLatency: result.latency && result.latency.average,
-        p99Latency: result.latency && result.latency.p99,
-        minLatency: result.latency && result.latency.min,
-        maxLatency: result.latency && result.latency.max,
-        averageReqPerSec: result.requests && result.requests.average,
-        p99ReqPerSec: result.requests && result.requests.p99,
-        minReqPerSec: result.requests && result.requests.min,
-        maxReqPerSec: result.requests && result.requests.max,
-        averageThroughput: result.throughput && result.throughput.average,
-        p99Throughput: result.throughput && result.throughput.p99,
-        minThroughput: result.throughput && result.throughput.min,
-        maxThroughput: result.throughput && result.throughput.max,
+        averageLatency: latency.average ?? null,
+        p50Latency: latency.p50 ?? null,
+        p90Latency: latency.p90 ?? null,
+        p99Latency: latency.p99 ?? null,
+        minLatency: latency.min ?? null,
+        maxLatency: latency.max ?? null,
+        averageReqPerSec: requests.average ?? null,
+        p50ReqPerSec: requests.p50 ?? null,
+        p90ReqPerSec: requests.p90 ?? null,
+        p99ReqPerSec: requests.p99 ?? null,
+        minReqPerSec: requests.min ?? null,
+        maxReqPerSec: requests.max ?? null,
+        averageThroughput: throughput.average ?? null,
+        p50Throughput: throughput.p50 ?? null,
+        p90Throughput: throughput.p90 ?? null,
+        p99Throughput: throughput.p99 ?? null,
+        minThroughput: throughput.min ?? null,
+        maxThroughput: throughput.max ?? null,
         totalCompletedRequests: result.totalCompletedRequests,
         totalRequests: result.totalRequests,
         totalBytes: result.totalBytes,
