@@ -32,7 +32,7 @@ async function runBenchmark(options) {
     await waitForHealthWithProcessCheck(server, serverExited, serverExitCode, healthUrl);
 
     // Run warmup phase
-    if (warmupSeconds > 0) {
+    if (isWarmup &&warmupSeconds > 0) {
         await runPhase({
             url: healthUrl.replace('/health', ''),
             connections,

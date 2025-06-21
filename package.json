@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "benchmark": "node src/benchmark.js",
+    "start:cli": "node src/benchmark-cli.js",
     "start:web": "node src/web-server.js"
   },
   "keywords": [],

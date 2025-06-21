@@ -1,6 +1,6 @@
 const inquirerLib = require('inquirer');
 const inquirer = inquirerLib.prompt ? inquirerLib : inquirerLib.default;
-const { runBenchmark } = require('./benchmark');
+const { runFullBenchmark } = require('./benchmark');
 const { serverTypes, loadTypes } = require('./benchmark-config');
 
 async function promptCliOptions() {
@@ -71,15 +71,10 @@ async function promptCliOptions() {
     try {
         const options = await promptCliOptions();
         console.log('Starting server and waiting for health check...');
-        options.isWarmup = false;
-        console.log('Warming up...');
-        options.isWarmup = true;
-        await runBenchmark({ ...options, isWarmup: true });
-        console.log('Warmup complete. Running load test...');
-        options.isWarmup = false;
-        const result = await runBenchmark(options);
+        const result = await runFullBenchmark({ ...options, isWarmup: true });
         console.log('Load test complete. Results:');
         console.log(result);
+        process.exit(0);
     } catch (err) {
         console.error('Error running benchmark:', err);
         process.exit(1);
