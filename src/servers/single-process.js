@@ -25,7 +25,7 @@ app.get('/health', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = 4000;
 app.listen(PORT, () => {
     console.log(`Single process server is running on port ${PORT}`);
 });

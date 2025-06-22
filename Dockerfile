@@ -17,7 +17,7 @@ RUN npm install --production
 COPY . .
 
 # Expose the port your app runs on (adjust if needed)
-EXPOSE 3000
+EXPOSE 3000 9229
 
 # Start the application (adjust if needed)
-CMD ["node", "src/web-server.js"]
+CMD ["node", "--inspect=0.0.0.0:9229", "src/web-server.js"]

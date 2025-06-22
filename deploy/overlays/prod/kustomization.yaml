@@ -1,0 +1,12 @@
+resources:
+  - ../../k8s-deployment.yaml
+  - ../../k8s-service.yaml
+
+images:
+  - name: node-k8s-loadtest
+    newName: myrepo/node-k8s-loadtest
+    newTag: prod-20250622
+
+replicas:
+  - name: node-k8s-loadtest
+    count: 3

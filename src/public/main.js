@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
           output.value = 'Warming up...';
         } else if (msg.phase === 'load-test') {
           output.value = 'Running benchmark...';
-        } else if (msg.phase === 'results' && msg.results) {
+        } else if (msg.phase === 'all' && msg.status === 'complete') {
           // Show summary as plain text
           let text = '';
           if (msg.results.warmup) {
@@ -128,10 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             text += 'Load-test (Summary Table)\n' + renderSummaryText(msg.results.result);
           }
           output.value = text.trim();
-        } else if (msg.phase === 'all' && msg.status === 'complete') {
-          if (!output.value || output.value.trim() === '' || output.value === 'Benchmark complete.') {
-            output.value = 'Benchmark complete.';
-          }
+          singleWs.close();
         } else if (msg.text) {
           output.value = msg.text;
         } else if (msg.progress) {
@@ -148,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
       wsClosed = true;
       singleBenchmarkRunning = false;
       runBtn.textContent = 'Run Benchmark';
-      if (!output.value.includes('complete')) {
+      if (!output.value.includes('Summary Table')) {
         output.value += '\nConnection closed.';
       }
     };
@@ -219,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
           results = msg.results;
           let text = results.map(r => `Load: ${r.loadType}\n${r.error ? r.error : renderSummaryText(r.summary)}`).join('\n---\n');
           batchOutput.value = text;
+          batchWs.close();
         }
       } catch (e) {
         batchOutput.value = 'Error parsing server message.';

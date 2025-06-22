@@ -1,0 +1,4 @@
+apiVersion: v2
+name: node-k8s-loadtest
+version: 0.1.0
+description: Node.js K8s Loadtest Benchmark

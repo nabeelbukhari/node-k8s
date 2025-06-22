@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "node-k8s-loadtest.fullname" . }}
+  labels:
+    app: {{ include "node-k8s-loadtest.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "node-k8s-loadtest.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "node-k8s-loadtest.name" . }}
+    spec:
+      containers:
+        - name: node-k8s-loadtest
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          ports:
+            - containerPort: 3000
+            - containerPort: 9229
