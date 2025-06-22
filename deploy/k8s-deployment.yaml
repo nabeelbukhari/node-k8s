@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-k8s-loadtest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-k8s-loadtest
+  template:
+    metadata:
+      labels:
+        app: node-k8s-loadtest
+    spec:
+      containers:
+      - name: node-k8s-loadtest
+        image: node-k8s-loadtest:latest
+        ports:
+        - containerPort: 3000
+        env:
+        # Add environment variables here if needed
+        # - name: NODE_ENV
+        #   value: "production"

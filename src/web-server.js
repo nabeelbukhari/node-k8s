@@ -3,9 +3,40 @@ const path = require('path');
 const { exec, spawn } = require('child_process');
 const fs = require('fs');
 const { randomUUID } = require('crypto');
+const { runBenchmark } = require('./benchmark');
+const { Worker } = require('worker_threads');
+const { serverTypes, loadTypes } = require('./benchmark-config');
 
 const app = express();
 const PORT = process.env.WEB_UI_PORT || 4000;
+const httpServer = require('http').createServer(app);
+const WebSocket = require('ws');
+
+// WebSocket server
+const wss = new WebSocket.Server({ server: httpServer });
+const wsClients = {};
+const runningWorkers = {};
+
+wss.on('connection', (ws, req) => {
+  ws.on('message', (msg) => {
+    try {
+      const data = JSON.parse(msg);
+      if (data.runId) wsClients[data.runId] = ws;
+      // Handle cancel message
+      if (data.cancel && data.runId && runningWorkers[data.runId]) {
+        console.log(`[INFO] User cancelled benchmark for runId: ${data.runId}`);
+        runningWorkers[data.runId].terminate();
+        delete runningWorkers[data.runId];
+        if (wsClients[data.runId]) wsClients[data.runId].send(JSON.stringify({ phase: 'cancelled', runId: data.runId }));
+      }
+    } catch {}
+  });
+  ws.on('close', () => {
+    for (const [runId, client] of Object.entries(wsClients)) {
+      if (client === ws) delete wsClients[runId];
+    }
+  });
+});
 
 // Ensure the public directory exists
 const publicDir = path.join(__dirname, 'public');
@@ -21,27 +52,12 @@ const runStates = {};
 
 // API to get available server types
 app.get('/api/server-types', (req, res) => {
-  res.json([
-    { value: 'single', label: 'Single Process' },
-    { value: 'worker', label: 'Worker Threads' },
-    { value: 'cluster', label: 'Cluster' }
-  ]);
+  res.json(serverTypes.map(({ value, label }) => ({ value, label })));
 });
 
 // API to get load types
 app.get('/api/load-types', (req, res) => {
-  res.json([
-    { value: '10-90', label: '10% light / 90% heavy' },
-    { value: '20-80', label: '20% light / 80% heavy' },
-    { value: '30-70', label: '30% light / 70% heavy' },
-    { value: '40-60', label: '40% light / 60% heavy' },
-    { value: '50-50', label: '50% light / 50% heavy' },
-    { value: '60-40', label: '60% light / 40% heavy' },
-    { value: '70-30', label: '70% light / 30% heavy' },
-    { value: '80-20', label: '80% light / 20% heavy' },
-    { value: '90-10', label: '90% light / 10% heavy' },
-    { value: '100-0', label: '100% light / 0% heavy' }
-  ]);
+  res.json(loadTypes.map(({ value, label }) => ({ value, label })));
 });
 
 // API to get run state
@@ -160,6 +176,77 @@ app.get('/api/batch-run-result/:runId', (req, res) => {
   }
 });
 
+// New API: run warmup and load-test in one go, streaming updates via WebSocket, using benchmark.js in a worker thread
+app.post('/api/run-benchmark-socket', async (req, res) => {
+  const runId = req.body.runId || randomUUID();
+  res.json({ runId }); // Respond immediately
+  const ws = wsClients[runId];
+  function sendWS(obj) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(obj)); }
+
+  // Start benchmark in a worker thread
+  const worker = new Worker(path.join(__dirname, 'benchmark-worker.js'), {
+    workerData: req.body
+  });
+  runningWorkers[runId] = worker;
+  worker.on('message', (msg) => {
+    sendWS(msg);
+  });
+  worker.on('error', (err) => {
+    sendWS({ phase: 'error', error: err.message });
+  });
+  worker.on('exit', (code) => {
+    delete runningWorkers[runId];
+    if (code !== 0) {
+      sendWS({ phase: 'error', error: `Worker stopped with exit code ${code}` });
+    } else {
+      sendWS({ phase: 'all', status: 'complete' });
+    }
+  });
+});
+
+// New API: run batch benchmark with WebSocket progress and summary results
+app.post('/api/run-batch-benchmark-socket', async (req, res) => {
+  const runId = req.body.runId || randomUUID();
+  res.json({ runId }); // Respond immediately
+  const ws = wsClients[runId];
+  function sendWS(obj) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(obj)); }
+
+  const { serverType, latencyThreshold, duration, connections, warmupSeconds } = req.body;
+  // Use the same loadTypes as the rest of the app
+  const batchLoadTypes = loadTypes.map(l => l.value);
+  const results = [];
+
+  // Start batch in a worker thread for cancellation support
+  const worker = new Worker(path.join(__dirname, 'benchmark-worker.js'), {
+    workerData: { batch: true, serverType, latencyThreshold, duration, connections, warmupSeconds, batchLoadTypes }
+  });
+  runningWorkers[runId] = worker;
+  worker.on('message', (msg) => {
+    sendWS(msg);
+  });
+  worker.on('error', (err) => {
+    sendWS({ phase: 'error', error: err.message });
+  });
+  worker.on('exit', (code) => {
+    delete runningWorkers[runId];
+    if (code !== 0) {
+      sendWS({ phase: 'error', error: `Worker stopped with exit code ${code}` });
+    }
+  });
+});
+
+// Cancel endpoint for REST (optional, for non-WS clients)
+app.post('/api/cancel-benchmark', (req, res) => {
+  const { runId } = req.body;
+  if (runId && runningWorkers[runId]) {
+    runningWorkers[runId].terminate();
+    delete runningWorkers[runId];
+    res.json({ cancelled: true });
+  } else {
+    res.json({ cancelled: false });
+  }
+});
+
 // Serve the frontend (fix: do not use wildcard route, only serve index.html for root or unknown static files)
 app.get('/', (req, res) => {
   res.sendFile(path.join(publicDir, 'index.html'));
@@ -174,6 +261,6 @@ app.use((req, res, next) => {
   }
 });
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Web UI running at http://localhost:${PORT}`);
 });
