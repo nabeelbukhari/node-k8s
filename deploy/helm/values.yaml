@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: node-k8s-loadtest
+  repository: nbukhari/node-k8s-loadtest
   tag: latest
   pullPolicy: IfNotPresent
 service:
