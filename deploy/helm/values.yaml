@@ -1,0 +1,9 @@
+replicaCount: 1
+image:
+  repository: node-k8s-loadtest
+  tag: latest
+  pullPolicy: IfNotPresent
+service:
+  type: LoadBalancer
+  port: 3000
+  targetPort: 3000

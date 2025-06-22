@@ -47,7 +47,15 @@ Push the built image to your Docker image registry:
 npm run docker:push
 ```
 
-### 3. Build a Docker Image Locally
+### 3. Build and Push Multi-Arch Docker Image
+
+Build and push the multi-architecture Docker image using the provided npm script:
+
+```shell
+npm run docker:build-multi
+```
+
+### 4. Build a Docker Image Locally
 
 To build the Docker image for local testing:
 
@@ -119,3 +127,102 @@ Following are available load types for benchmarks:
 
 - The benchmark will automatically start the selected server, run the load test, and display results.
 - Make sure port 3000 is available before running the benchmark.
+
+## Kubernetes Deployment
+
+### Prerequisites
+
+- Docker (for building images)
+- kubectl (for applying manifests)
+- [Kustomize](https://kustomize.io/) (built into kubectl)
+- [Helm](https://helm.sh/) (for Helm-based deployment)
+
+---
+
+## Deploying with Kustomize
+
+### 1. Build and Push Docker Image
+
+```sh
+npm run docker:build
+```
+
+### 2. Deploy with Kustomize
+
+```sh
+kubectl apply -k deploy/
+```
+
+- Edit `deploy/kustomization.yaml` to set the default image and replica count.
+
+#### Overlays
+
+- To override image/tag/replicas for a specific environment (e.g., production), use the overlay in `deploy/overlays/prod/`:
+  ```sh
+  kubectl apply -k deploy/overlays/prod/
+  ```
+- The overlay sets:
+  - Image: `myrepo/node-k8s-loadtest:prod-20250622`
+  - Replicas: 3
+
+#### Uninstall
+
+```sh
+kubectl delete -k deploy/
+```
+
+---
+
+## Deploying with Helm
+
+### 1. Build and Push Docker Image
+
+```sh
+npm run docker:build
+```
+
+### 2. Deploy with Helm
+
+```sh
+cd deploy/helm
+helm install node-k8s-loadtest .
+```
+
+- See `deploy/helm/` for Helm chart configuration.
+
+#### Uninstall
+
+```sh
+helm uninstall node-k8s-loadtest
+```
+
+---
+
+## Accessing the Service
+
+- The service is exposed as a load balancer on port 3000 by default.
+- Access at: `http://<node-ip>:3000`
+
+## Note for Minikube Users on Windows
+
+If you're running **Minikube on Windows**, you need to set up an external IP to access your NodePort service from your host machine. Open a separate terminal with administrator privileges and run:
+
+```sh
+minikube tunnel
+```
+
+This command creates a routable external IP for your service.
+
+To verify the external IP assignment, run:
+
+```sh
+kubectl get service node-k8s-loadtest-service
+```
+
+Look for a value in the `EXTERNAL-IP` column.
+
+You can now access your service in your browser at:
+
+```
+http://<EXTERNAL-IP>:3000
+```

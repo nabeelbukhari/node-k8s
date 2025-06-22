@@ -3,11 +3,10 @@ kind: Service
 metadata:
   name: node-k8s-loadtest-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: node-k8s-loadtest
   ports:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-      nodePort: 30080

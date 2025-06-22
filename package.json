@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:cli": "node src/benchmark-cli.js",
     "start:web": "node src/web-server.js",
-    "docker:build": "docker buildx build --platform linux/amd64,linux/arm64 -t node-k8s-loadtest:latest .",
-    "docker:push": "docker push node-k8s-loadtest:latest",
+    "docker:build-multi": "docker buildx build --platform linux/amd64,linux/arm64 -t nbukhari/node-k8s-loadtest:latest --push .",
+    "docker:build": "docker buildx build --platform linux/amd64 -t node-k8s-loadtest:latest --load .",
+    "docker:push": "docker tag node-k8s-loadtest:latest nbukhari/node-k8s-loadtest:latest && docker push nbukhari/node-k8s-loadtest:latest",
     "docker:build-local": "docker build -t node-k8s-loadtest:latest .",
     "docker:run-local": "docker run --rm -p 3000:3000 node-k8s-loadtest:latest"
   },
