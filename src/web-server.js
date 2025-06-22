@@ -8,7 +8,7 @@ const { Worker } = require('worker_threads');
 const { serverTypes, loadTypes } = require('./benchmark-config');
 
 const app = express();
-const PORT = process.env.WEB_UI_PORT || 4000;
+const PORT = process.env.WEB_UI_PORT || 3000;
 const httpServer = require('http').createServer(app);
 const WebSocket = require('ws');
 
