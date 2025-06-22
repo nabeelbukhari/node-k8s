@@ -33,7 +33,7 @@ if (isMainThread) {
             res.status(503).send('NOT READY');
         }
     });
-    const PORT = process.env.PORT || 3000;
+    const PORT = 3000;
     app.listen(PORT, () => {
         console.log(`Worker thread server is running on port ${PORT}`);
     });
