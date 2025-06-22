@@ -36,7 +36,7 @@ if (cluster.isMaster) {
             res.status(503).send('NOT READY');
         }
     });
-    const PORT = process.env.PORT || 3000;
+    const PORT = 3000;
     app.listen(PORT + 1, () => {
         console.log(`Cluster master health endpoint on port ${PORT + 1}`);
     });

@@ -3,7 +3,7 @@
 const serverTypes = [
   { value: 'single', label: 'Single Process', path: 'servers/single-process.js', port: 4000 },
   { value: 'worker', label: 'Worker Threads', path: 'servers/worker-thread.js', port: 4000 },
-  { value: 'cluster', label: 'Cluster', path: 'servers/cluster.js', port: 4000 }
+  { value: 'cluster', label: 'Cluster', path: 'servers/cluster.js', port: 3001 }
 ];
 
 const loadTypes = [
