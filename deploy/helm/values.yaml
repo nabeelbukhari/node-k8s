@@ -7,3 +7,6 @@ service:
   type: LoadBalancer
   port: 3000
   targetPort: 3000
+debug:
+  port: 9229
+  targetPort: 9229

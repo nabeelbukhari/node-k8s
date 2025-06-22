@@ -20,3 +20,4 @@ spec:
           imagePullPolicy: "{{ .Values.image.pullPolicy }}"
           ports:
             - containerPort: 3000
+            - containerPort: 9229

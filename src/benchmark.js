@@ -20,15 +20,16 @@ async function runBenchmark(options) {
     let server;
     let serverExited = false;
     let serverExitCode = null;
-    server = spawn('node', [serverChoice.path], { stdio: 'inherit' });
+    console.log('[DEBUG] Spawning server from:', path.dirname(__filename));
+    const serverPath = path.resolve(path.dirname(__filename), serverChoice.path);
+    server = spawn('node', [serverPath], { stdio: 'inherit' });
     server.on('exit', (code, signal) => {
         serverExited = true;
         serverExitCode = code;
     });
 
     // Wait for health endpoint
-    let healthUrl = 'http://localhost:3000/health';
-    if (serverChoice.value === 'cluster' || serverChoice.value === 'worker') healthUrl = 'http://localhost:3001/health';
+    let healthUrl = `http://localhost:${serverChoice.port}/health`;
     await waitForHealthWithProcessCheck(server, serverExited, serverExitCode, healthUrl);
 
     // Run warmup phase
@@ -66,11 +67,12 @@ async function runFullBenchmark(options, progressCb) {
     const loadChoice = { load: lt };
 
     // Start the selected server
-    console.log('[DEBUG] Spawning server:', serverChoice.path);
     let server;
     let serverExited = false;
     let serverExitCode = null;
-    server = spawn('node', [serverChoice.path], { stdio: 'inherit' });
+    const serverPath = path.resolve(path.dirname(__filename), serverChoice.path);
+    console.log('[DEBUG] Server path resolved to:', serverPath);
+    server = spawn('node', [serverPath], { stdio: 'inherit' });
     server.on('exit', (code, signal) => {
         serverExited = true;
         serverExitCode = code;
@@ -81,8 +83,7 @@ async function runFullBenchmark(options, progressCb) {
     });
 
     // Wait for health endpoint
-    let healthUrl = 'http://localhost:3000/health';
-    if (serverChoice.value === 'cluster' || serverChoice.value === 'worker') healthUrl = 'http://localhost:3001/health';
+    let healthUrl = `http://localhost:${serverChoice.port}/health`;
     console.log('[DEBUG] Waiting for health endpoint:', healthUrl);
     try {
         await waitForHealthWithProcessCheck(server, serverExited, serverExitCode, healthUrl);

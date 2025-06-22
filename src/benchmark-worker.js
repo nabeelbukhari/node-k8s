@@ -25,10 +25,13 @@ const { runFullBenchmark, runBenchmark } = require('./benchmark');
       const results = await runFullBenchmark(workerData, (msg) => {
         parentPort.postMessage(msg);
       });
-      parentPort.postMessage({ phase: 'results', results });
-      parentPort.postMessage({ phase: 'all', status: 'complete' });
+      console.log('[DEBUG] Worker: sending results');
+      parentPort.postMessage({ phase: 'all', results: results, status: 'complete' });
+      console.log('[DEBUG] Worker: all complete');
+      process.exit(0);
     }
   } catch (e) {
+    console.error('[DEBUG] Worker: error', e);
     parentPort.postMessage({ phase: 'error', error: e.message });
   }
 })();

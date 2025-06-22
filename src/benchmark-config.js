@@ -1,9 +1,9 @@
 // Centralized config for server types and load types
 
 const serverTypes = [
-  { value: 'single', label: 'Single Process', path: 'src/servers/single-process.js' },
-  { value: 'worker', label: 'Worker Threads', path: 'src/servers/worker-thread.js' },
-  { value: 'cluster', label: 'Cluster', path: 'src/servers/cluster.js' }
+  { value: 'single', label: 'Single Process', path: 'servers/single-process.js', port: 4000 },
+  { value: 'worker', label: 'Worker Threads', path: 'servers/worker-thread.js', port: 4000 },
+  { value: 'cluster', label: 'Cluster', path: 'servers/cluster.js', port: 4000 }
 ];
 
 const loadTypes = [

@@ -87,7 +87,7 @@ npm run docker:build-local
 
 3. The UI will appear as shown below:
 
-   ![Web UI Screenshot](src/docs/ui-image.png)
+   ![Web UI Screenshot](docs/ui-image.png)
 
 4. Select your desired server type and load distribution, then click **Run Benchmark**.
 
@@ -150,7 +150,7 @@ npm run docker:build
 ### 2. Deploy with Kustomize
 
 ```sh
-kubectl apply -k deploy/
+npm run start:k8s
 ```
 
 - Edit `deploy/kustomization.yaml` to set the default image and replica count.
@@ -168,7 +168,7 @@ kubectl apply -k deploy/
 #### Uninstall
 
 ```sh
-kubectl delete -k deploy/
+npm run stop:k8s
 ```
 
 ---
@@ -184,8 +184,8 @@ npm run docker:build
 ### 2. Deploy with Helm
 
 ```sh
-cd deploy/helm
-helm install node-k8s-loadtest .
+npm run start:helm
+
 ```
 
 - See `deploy/helm/` for Helm chart configuration.
@@ -193,7 +193,7 @@ helm install node-k8s-loadtest .
 #### Uninstall
 
 ```sh
-helm uninstall node-k8s-loadtest
+npm run stop:helm
 ```
 
 ---

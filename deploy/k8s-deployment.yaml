@@ -13,11 +13,12 @@ spec:
         app: node-k8s-loadtest
     spec:
       containers:
-      - name: node-k8s-loadtest
-        image: node-k8s-loadtest:latest
-        ports:
-        - containerPort: 3000
-        env:
-        # Add environment variables here if needed
-        # - name: NODE_ENV
-        #   value: "production"
+        - name: node-k8s-loadtest
+          image: node-k8s-loadtest:latest
+          ports:
+            - containerPort: 3000
+            - containerPort: 9229
+          env:
+          # Add environment variables here if needed
+          # - name: NODE_ENV
+          #   value: "production"

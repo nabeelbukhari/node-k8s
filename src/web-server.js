@@ -198,8 +198,6 @@ app.post('/api/run-benchmark-socket', async (req, res) => {
     delete runningWorkers[runId];
     if (code !== 0) {
       sendWS({ phase: 'error', error: `Worker stopped with exit code ${code}` });
-    } else {
-      sendWS({ phase: 'all', status: 'complete' });
     }
   });
 });

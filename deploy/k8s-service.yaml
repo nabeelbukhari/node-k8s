@@ -7,6 +7,11 @@ spec:
   selector:
     app: node-k8s-loadtest
   ports:
-    - protocol: TCP
+    - name: application
+      protocol: TCP
       port: 3000
       targetPort: 3000
+    - name: debug
+      protocol: TCP
+      port: 9229
+      targetPort: 9229
