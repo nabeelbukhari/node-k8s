@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-k8s-loadtest
+spec:
+  template:
+    spec:
+      containers:
+        - name: node-k8s-loadtest
+          resources:
+            requests:
+              cpu: "1200m"
+              memory: "1Gi"
+            limits:
+              cpu: "1500m"
+              memory: "1Gi"

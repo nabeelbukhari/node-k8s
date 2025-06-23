@@ -16,7 +16,9 @@
     "docker:build": "docker buildx build --platform linux/amd64 -t node-k8s-loadtest:latest --load .",
     "docker:push": "docker tag node-k8s-loadtest:latest nbukhari/node-k8s-loadtest:latest && docker push nbukhari/node-k8s-loadtest:latest",
     "docker:build-local": "docker build -t node-k8s-loadtest:latest .",
-    "docker:run-local": "docker run --rm -p 3000:3000 node-k8s-loadtest:latest"
+    "docker:run-local": "docker run --rm -p 3000:3000 node-k8s-loadtest:latest",
+    "start:benchmark": "node scripts/run-benchmarks-in-k8s.js",
+    "lint": "eslint . --ext .js --fix"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +27,14 @@
     "autocannon": "^8.0.0",
     "express": "^5.1.0",
     "inquirer": "^12.6.3",
+    "node-fetch": "^3.3.2",
+    "piscina": "^5.1.1",
     "ws": "^8.18.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.0",
+    "prettier": "^3.6.0"
   }
 }

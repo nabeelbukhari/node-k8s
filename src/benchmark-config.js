@@ -1,9 +1,27 @@
 // Centralized config for server types and load types
 
 const serverTypes = [
-  { value: 'single', label: 'Single Process', path: 'servers/single-process.js', port: 4000 },
-  { value: 'worker', label: 'Worker Threads', path: 'servers/worker-thread.js', port: 4000 },
-  { value: 'cluster', label: 'Cluster', path: 'servers/cluster.js', port: 3001 }
+  {
+    value: 'single',
+    label: 'Single Process',
+    path: 'servers/single-process.js',
+    port: 4000,
+    healthPort: 4000,
+  },
+  {
+    value: 'worker',
+    label: 'Worker Threads',
+    path: 'servers/worker-thread.js',
+    port: 4000,
+    healthPort: 4000,
+  },
+  {
+    value: 'cluster',
+    label: 'Cluster',
+    path: 'servers/cluster.js',
+    port: 4000,
+    healthPort: 4001,
+  },
 ];
 
 const loadTypes = [
@@ -16,7 +34,7 @@ const loadTypes = [
   { value: '70-30', label: '70% light / 30% heavy', light: 0.7, heavy: 0.3 },
   { value: '80-20', label: '80% light / 20% heavy', light: 0.8, heavy: 0.2 },
   { value: '90-10', label: '90% light / 10% heavy', light: 0.9, heavy: 0.1 },
-  { value: '100-0', label: '100% light / 0% heavy', light: 1.0, heavy: 0.0 }
+  { value: '100-0', label: '100% light / 0% heavy', light: 1.0, heavy: 0.0 },
 ];
 
 module.exports = { serverTypes, loadTypes };

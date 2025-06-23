@@ -1,59 +1,71 @@
-const { lightWorkload, heavyWorkload } = require('./workloads');
 const express = require('express');
-const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
+const Piscina = require('piscina');
+const path = require('path');
 
-let ready = false;
-let workerReady = false;
+const app = express();
+const PORT = 4000;
+const cpuLength = require('os').cpus().length;
+let lightRequestCount = 0;
+let heavyRequestCount = 0;
 
-if (isMainThread) {
-    const app = express();
-    const worker = new Worker(__filename, {
-        workerData: { type: 'worker' }
-    });
-    worker.on('online', () => {
-        workerReady = true;
-        ready = true;
-    });
-    app.get('/light', async (req, res) => {
-        worker.postMessage({ type: 'light' });
-        worker.once('message', result => {
-            res.json({ result });
-        });
-    });
-    app.get('/heavy', async (req, res) => {
-        worker.postMessage({ type: 'heavy' });
-        worker.once('message', result => {
-            res.json({ result });
-        });
-    });
-    app.get('/health', async (req, res) => {
-        if (ready) {
-            res.status(200).send('OK');
-        } else {
-            res.status(503).send('NOT READY');
-        }
-    });
-    const PORT = 3000;
-    app.listen(PORT, () => {
-        console.log(`Worker thread server is running on port ${PORT}`);
-    });
-} else {
-    parentPort.on('message', async (message) => {
-        let result = 0;
-        if (message.type === 'light') {
-            result = await lightWorkload();
-        } else if (message.type === 'heavy') {
-            result = await heavyWorkload();
-        }
-        parentPort.postMessage(result);
-    });
-    // Health endpoint for worker
-    const app = express();
-    app.get('/health', async (req, res) => {
-        res.status(200).send('OK');
-    });
-    const PORT = 4000;
-    app.listen(PORT, () => {
-        // No log needed for worker health
-    });
-}
+// Create a Piscina pool using the worker-task.js file
+const piscina = new Piscina({
+  filename: path.resolve(__dirname, 'worker-task.js'),
+  maxThreads: cpuLength, // Use all available CPUs by default
+});
+
+app.get('/light', async (req, res) => {
+  try {
+    const result = await piscina.run('light');
+    res.json({ result });
+    lightRequestCount++;
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/heavy', async (req, res) => {
+  try {
+    const result = await piscina.run('heavy');
+    res.json({ result });
+    heavyRequestCount++;
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/health', (req, res) => {
+  if (piscina.threads.length > 0) {
+    res.status(200).send('OK');
+  } else {
+    res.status(503).send('NOT READY');
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(
+    `Piscina worker thread server with ${cpuLength} threads is running on port ${PORT}`,
+  );
+});
+
+// Notify parent process that server is ready
+process.send && process.send('ready');
+
+// Listen for SIGINT and SIGTERM to handle graceful shutdown
+const shutdown = () => {
+  console.log('Received shutdown signal. Shutting down gracefully...');
+  console.log(
+    `Processed ${lightRequestCount} light requests and ${heavyRequestCount} heavy requests.`,
+  );
+  ready = false; // Set ready to false to prevent new requests
+  piscina.close({ force: true }).then(() => {
+    console.log('Server shutdown complete.');
+    process.exit(0);
+  });
+};
+
+process.on('message', (msg) => {
+  if (msg === 'shutdown') {
+    shutdown();
+  }
+});
