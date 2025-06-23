@@ -11,7 +11,7 @@ let heavyRequestCount = 0;
 // Create a Piscina pool using the worker-task.js file
 const piscina = new Piscina({
   filename: path.resolve(__dirname, 'worker-task.js'),
-  maxThreads:cpuLength  // Use all available CPUs by default
+  maxThreads: cpuLength, // Use all available CPUs by default
 });
 
 app.get('/light', async (req, res) => {
@@ -43,7 +43,9 @@ app.get('/health', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Piscina worker thread server with ${cpuLength} threads is running on port ${PORT}`);
+  console.log(
+    `Piscina worker thread server with ${cpuLength} threads is running on port ${PORT}`,
+  );
 });
 
 // Notify parent process that server is ready
@@ -51,19 +53,19 @@ process.send && process.send('ready');
 
 // Listen for SIGINT and SIGTERM to handle graceful shutdown
 const shutdown = () => {
-    console.log('Received shutdown signal. Shutting down gracefully...');
-    console.log(`Processed ${lightRequestCount} light requests and ${heavyRequestCount} heavy requests.`);
-    ready = false; // Set ready to false to prevent new requests
-    piscina.close({force: true}).then(
-        () => {
-            console.log('Server shutdown complete.');
-            process.exit(0);
-        }
-    );
+  console.log('Received shutdown signal. Shutting down gracefully...');
+  console.log(
+    `Processed ${lightRequestCount} light requests and ${heavyRequestCount} heavy requests.`,
+  );
+  ready = false; // Set ready to false to prevent new requests
+  piscina.close({ force: true }).then(() => {
+    console.log('Server shutdown complete.');
+    process.exit(0);
+  });
 };
 
 process.on('message', (msg) => {
-    if (msg === 'shutdown') {
-        shutdown();
-    }
+  if (msg === 'shutdown') {
+    shutdown();
+  }
 });

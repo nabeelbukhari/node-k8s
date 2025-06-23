@@ -9,8 +9,8 @@ spec:
         - name: node-k8s-loadtest
           resources:
             requests:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: "1200m"
+              memory: "1Gi"
             limits:
-              cpu: "500m"
-              memory: "512Mi"
+              cpu: "1500m"
+              memory: "1Gi"

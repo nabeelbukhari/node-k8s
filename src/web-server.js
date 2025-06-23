@@ -1,9 +1,7 @@
 const express = require('express');
 const path = require('path');
-const { exec, spawn } = require('child_process');
 const fs = require('fs');
 const { randomUUID } = require('crypto');
-const { runBenchmark } = require('./benchmark');
 const { Worker } = require('worker_threads');
 const { serverTypes, loadTypes } = require('./benchmark-config');
 
@@ -17,7 +15,7 @@ const wss = new WebSocket.Server({ server: httpServer });
 const wsClients = {};
 const runningWorkers = {};
 
-wss.on('connection', (ws, req) => {
+wss.on('connection', (ws) => {
   ws.on('message', (msg) => {
     try {
       const data = JSON.parse(msg);
@@ -27,7 +25,10 @@ wss.on('connection', (ws, req) => {
         console.log(`[INFO] User cancelled benchmark for runId: ${data.runId}`);
         runningWorkers[data.runId].terminate();
         delete runningWorkers[data.runId];
-        if (wsClients[data.runId]) wsClients[data.runId].send(JSON.stringify({ phase: 'cancelled', runId: data.runId }));
+        if (wsClients[data.runId])
+          wsClients[data.runId].send(
+            JSON.stringify({ phase: 'cancelled', runId: data.runId }),
+          );
       }
     } catch {}
   });
@@ -47,9 +48,6 @@ if (!fs.existsSync(publicDir)) {
 app.use(express.json());
 app.use(express.static(publicDir));
 
-// In-memory run state store
-const runStates = {};
-
 // API to get available server types
 app.get('/api/server-types', (req, res) => {
   res.json(serverTypes.map(({ value, label }) => ({ value, label })));
@@ -65,11 +63,13 @@ app.post('/api/run-benchmark-socket', async (req, res) => {
   const runId = req.body.runId || randomUUID();
   res.json({ runId }); // Respond immediately
   const ws = wsClients[runId];
-  function sendWS(obj) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(obj)); }
+  function sendWS(obj) {
+    if (ws && ws.readyState === 1) ws.send(JSON.stringify(obj));
+  }
 
   // Start benchmark in a worker thread
   const worker = new Worker(path.join(__dirname, 'benchmark-worker.js'), {
-    workerData: req.body
+    workerData: req.body,
   });
   runningWorkers[runId] = worker;
   worker.on('message', (msg) => {
@@ -81,7 +81,10 @@ app.post('/api/run-benchmark-socket', async (req, res) => {
   worker.on('exit', (code) => {
     delete runningWorkers[runId];
     if (code !== 0) {
-      sendWS({ phase: 'error', error: `Worker stopped with exit code ${code}` });
+      sendWS({
+        phase: 'error',
+        error: `Worker stopped with exit code ${code}`,
+      });
     }
   });
 });
@@ -91,16 +94,26 @@ app.post('/api/run-batch-benchmark-socket', async (req, res) => {
   const runId = req.body.runId || randomUUID();
   res.json({ runId }); // Respond immediately
   const ws = wsClients[runId];
-  function sendWS(obj) { if (ws && ws.readyState === 1) ws.send(JSON.stringify(obj)); }
+  function sendWS(obj) {
+    if (ws && ws.readyState === 1) ws.send(JSON.stringify(obj));
+  }
 
-  const { serverType, latencyThreshold, duration, connections, warmupSeconds } = req.body;
+  const { serverType, latencyThreshold, duration, connections, warmupSeconds } =
+    req.body;
   // Use the same loadTypes as the rest of the app
-  const batchLoadTypes = loadTypes.map(l => l.value);
-  const results = [];
+  const batchLoadTypes = loadTypes.map((l) => l.value);
 
   // Start batch in a worker thread for cancellation support
   const worker = new Worker(path.join(__dirname, 'benchmark-worker.js'), {
-    workerData: { batch: true, serverType, latencyThreshold, duration, connections, warmupSeconds, batchLoadTypes }
+    workerData: {
+      batch: true,
+      serverType,
+      latencyThreshold,
+      duration,
+      connections,
+      warmupSeconds,
+      batchLoadTypes,
+    },
   });
   runningWorkers[runId] = worker;
   worker.on('message', (msg) => {
@@ -112,7 +125,10 @@ app.post('/api/run-batch-benchmark-socket', async (req, res) => {
   worker.on('exit', (code) => {
     delete runningWorkers[runId];
     if (code !== 0) {
-      sendWS({ phase: 'error', error: `Worker stopped with exit code ${code}` });
+      sendWS({
+        phase: 'error',
+        error: `Worker stopped with exit code ${code}`,
+      });
     }
   });
 });
@@ -135,7 +151,7 @@ app.get('/', (req, res) => {
 });
 
 // 404 for all other API or unknown routes
-app.use((req, res, next) => {
+app.use((req, res) => {
   if (req.path.startsWith('/api/')) {
     res.status(404).json({ error: 'API route not found' });
   } else {
