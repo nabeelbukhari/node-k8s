@@ -10,3 +10,6 @@ images:
 replicas:
   - name: node-k8s-loadtest
     count: 1
+
+patchesStrategicMerge:
+  - resources-patch.yaml

@@ -7,6 +7,7 @@ const autocannon = require('autocannon');
 const fs = require('fs');
 const path = require('path');
 const { serverTypes, loadTypes } = require('./benchmark-config');
+const { sleep } = require('./benchmark-utils');
 
 
 // Refactored: runBenchmark now takes an options object and does not handle CLI or web-specific logic.
@@ -72,7 +73,13 @@ async function runFullBenchmark(options, progressCb) {
     let serverExitCode = null;
     const serverPath = path.resolve(path.dirname(__filename), serverChoice.path);
     console.log('[DEBUG] Server path resolved to:', serverPath);
-    server = spawn('node', [serverPath], { stdio: 'inherit' });
+    server = spawn('node', [serverPath], {
+        stdio: ['inherit', 'inherit', 'inherit', 'ipc']
+    });
+    server.on('message', function(data) {
+        console.log(`[DEBUG] Child process sent: ${data}`);
+    })
+    // Capture output
     server.on('exit', (code, signal) => {
         serverExited = true;
         serverExitCode = code;
@@ -82,8 +89,11 @@ async function runFullBenchmark(options, progressCb) {
         console.error('[DEBUG] Server process error:', err);
     });
 
+    // Give server time to start
+    await sleep(1000);
+
     // Wait for health endpoint
-    let healthUrl = `http://localhost:${serverChoice.port}/health`;
+    let healthUrl = `http://localhost:${serverChoice.healthPort}/health`;
     console.log('[DEBUG] Waiting for health endpoint:', healthUrl);
     try {
         await waitForHealthWithProcessCheck(server, serverExited, serverExitCode, healthUrl);
@@ -94,6 +104,7 @@ async function runFullBenchmark(options, progressCb) {
         throw e;
     }
 
+    let serverUrl = `http://localhost:${serverChoice.port}/`;
     // Run warmup phase
     let warmupResult = null;
     let warmupCliTable = null;
@@ -102,7 +113,7 @@ async function runFullBenchmark(options, progressCb) {
         console.log('[DEBUG] Starting warmup phase...');
         try {
             warmupResult = await runPhase({
-                url: healthUrl.replace('/health', ''),
+                url: serverUrl,
                 connections,
                 duration: warmupSeconds,
                 load: loadChoice.load,
@@ -125,7 +136,7 @@ async function runFullBenchmark(options, progressCb) {
     let result = null;
     try {
         result = await runPhase({
-            url: healthUrl.replace('/health', ''),
+            url: serverUrl,
             connections,
             duration,
             load: loadChoice.load,
@@ -138,13 +149,23 @@ async function runFullBenchmark(options, progressCb) {
         if (server) server.kill();
         throw e;
     }
-    if (progressCb) progressCb({ phase: 'load-test', status: 'complete', result: extractSummary(result), cliTable: loadTestCliTable });
-
     if (server) {
         console.log('[DEBUG] Killing server process...');
-        server.kill();
+        server.send('shutdown'); // Notify server to shutdown gracefully
+        
+        // Wait for server to exit
+        await sleep(2000);
+
+        // If server has not exited, force kill it
+        if (serverExited) {
+            console.log('[DEBUG] Server exited successfully with code:', serverExitCode);
+        } else if (server.kill('SIGKILL')) {
+            console.log('[DEBUG] Server killed. Returning results.');
+        }
     }
-    console.log('[DEBUG] Server killed. Returning results.');
+    
+    if (progressCb) progressCb({ phase: 'load-test', status: 'complete', result: extractSummary(result), cliTable: loadTestCliTable });
+
     return {
         warmup: extractSummary(warmupResult),
         result: extractSummary(result),
