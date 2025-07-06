@@ -39,7 +39,7 @@ Following are available load types for benchmarks:
 
 [How To Build & Run](docs/BUILD-RUN.md)
 
-[Kubernetes Deployment](docs/DEPLOYMENT.md)
+[Kubernetes Deployment](docs/DEPLOYMENTS.md)
 
 [Benchmarking](docs/BENCHMARKS.md)
 
