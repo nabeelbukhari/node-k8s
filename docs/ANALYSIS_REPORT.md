@@ -31,9 +31,9 @@ This comprehensive analysis examines 120 benchmark runs across 10 different load
 ### Worker Thread Configuration (Needs Improvement)
 - **Average throughput:** 4.87 RPS (lowest)
 - **Success rate:** 60.19%
-- **Peak performance:** 22.04 RPS
+- **Peak performance:** 22.04 RPS (second highest peak after cluster)
 - **Total errors:** 566
-- **Issues:** Many configurations with success rates below 35%
+- **Issues:** Many configurations with success rates below 35%, particularly at lower resource allocations
 
 ## Load Type Impact Analysis
 
@@ -139,4 +139,98 @@ This comprehensive analysis examines 120 benchmark runs across 10 different load
 - **Worker threads show threshold-based scaling improvements**
 - **Single process shows minimal scaling benefits**
 
-This analysis provides a comprehensive view of the application's performance characteristics and clear guidance for optimal configuration choices in production environments.
+## Visual Analysis of Benchmark Results
+
+### Benchmark Graphs Overview
+
+The benchmark results have been visualized in three comprehensive graphs showing the relationship between CPU allocation and total requests completed for each server type across all load configurations:
+
+![Cluster Benchmark Results](../benchmark/images/benchmark_cluster.png)
+*Figure 1: Cluster Configuration - Request Completed vs CPU allocation across all load types and worker counts*
+
+![Single Process Benchmark Results](../benchmark/images/benchmark_single.png)
+*Figure 2: Single Process Configuration - Request Completed vs CPU allocation across all load types*
+
+![Worker Thread Benchmark Results](../benchmark/images/benchmark_worker.png)
+*Figure 3: Worker Thread Configuration - Request Completed vs CPU allocation across all load types and worker counts*
+
+### Cluster Configuration Graph Analysis
+*(Reference: Figure 1 - benchmark_cluster.png)*
+- **Best scaling pattern:** Shows clear linear scaling with CPU resources
+- **Peak performance:** Achieves highest request completion rates (up to ~720 requests) at 2500m CPU
+- **Load type impact:** 100% light requests (100-0) consistently outperform mixed loads across all CPU levels
+- **Worker scaling:** Higher worker counts (w=8, w=10) show significantly better performance
+- **Resource efficiency:** Performance improvements are consistent across the entire CPU range
+
+### Single Process Configuration Graph Analysis
+*(Reference: Figure 2 - benchmark_single.png)*
+- **Flat performance curve:** Shows minimal scaling benefits from increased CPU allocation
+- **Load type dominance:** 100% light requests (100-0) dramatically outperform all mixed loads (~280 requests vs ~100 requests)
+- **Resource independence:** Performance remains relatively stable regardless of CPU allocation (500m to 2500m)
+- **Bottleneck indication:** The flat curve suggests single-threaded bottlenecks limiting CPU utilization
+
+### Worker Thread Configuration Graph Analysis
+*(Reference: Figure 3 - benchmark_worker.png)*
+- **Inconsistent scaling:** Shows erratic performance patterns across CPU allocations
+- **Performance gaps:** Large variations between different configurations at the same CPU level
+- **Load sensitivity:** Mixed load types show particularly poor performance with high error rates
+- **Resource threshold:** Performance improves significantly only at higher resource allocations (1500m+ CPU)
+
+### Key Visual Insights
+
+#### 1. **Server Type Performance Hierarchy**
+The graphs clearly demonstrate the performance ranking:
+1. **Cluster:** Consistent scaling, highest peaks (up to ~720 requests)
+2. **Worker:** High peak potential (~440 requests) but inconsistent with many low-performing configurations  
+3. **Single:** Stable but limited performance ceiling (~280 requests)
+
+#### 2. **Load Type Impact Visualization**
+*(Clearly visible across all three benchmark graphs)*
+- **100% light requests (orange line):** Consistently at the top across all server types
+- **Mixed loads:** Clustered at lower performance levels with significant overlap
+- **Performance gap:** 3x difference between pure light and mixed loads
+
+#### 3. **Resource Scaling Patterns**
+*(Compare scaling trends across Figures 1-3)*
+- **Cluster:** Linear relationship between CPU and performance
+- **Single:** Horizontal line indicating no scaling benefit
+- **Worker:** Scattered points indicating configuration issues
+
+#### 4. **Worker Count Effectiveness**
+*(Most evident in Figure 1 - Cluster configuration)*
+The cluster graph shows clear separation by worker count:
+- **w=10:** Highest performance tier
+- **w=8:** Second tier with good scaling
+- **w=6:** Third tier with moderate performance
+- **w=4:** Lowest tier but still scalable
+
+### Graph-Based Recommendations
+
+#### Based on Visual Evidence:
+1. **Choose cluster configuration** for any production workload requiring scaling
+2. **Avoid single process** for applications needing to utilize additional CPU resources
+3. **Investigate worker thread implementation** due to inconsistent performance patterns
+4. **Optimize for light requests** when possible (dramatic visual performance difference)
+5. **Use 8-10 workers** in cluster mode for optimal resource utilization
+
+#### Resource Planning Insights:
+- **Cluster scaling is predictable:** Use graphs to estimate performance at different CPU levels
+- **Single process has a ceiling:** No benefit beyond 1000m CPU allocation
+- **Worker threads need minimum resources:** Avoid configurations below 1500m CPU
+
+### Anomaly Detection from Graphs
+- **Worker thread outliers:** Several configurations show unexpectedly low performance
+- **Single process consistency:** Remarkably stable across all resource levels
+- **Cluster linearity:** Clean scaling pattern suggests well-implemented parallelization
+
+These visualizations provide clear evidence for the quantitative analysis and support the recommendation to use cluster configurations for production workloads requiring performance and scalability.
+
+## Analysis Consistency Review
+
+**Note on Performance Hierarchy:** While worker threads show the second-highest peak performance in absolute numbers (22.04 RPS, ~440 total requests), they rank lowest in practical terms due to:
+- Inconsistent performance across configurations
+- Many configurations with extremely poor success rates (<35%)
+- High error rates and timeout issues
+- Poor performance at lower resource allocations
+
+This explains why cluster configuration is recommended for production despite worker threads having higher peak potential - cluster provides reliable, predictable performance while worker threads show erratic behavior.
