@@ -20,12 +20,14 @@ spec:
             - containerPort: 9229
           resources:
             limits:
-              cpu: "500m"
-              memory: "1024Mi"
+              cpu: '1500m'
+              memory: '1024Mi'
             requests:
-              cpu: "250m"
-              memory: "128Mi"
+              cpu: '1000m'
+              memory: '1024Mi'
           env:
+            - name: WORKER_THREADS
+              value: '${WORKER_THREADS:-4}'
           # Add environment variables here if needed
           # - name: NODE_ENV
           #   value: "production"

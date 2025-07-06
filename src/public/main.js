@@ -69,8 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const serverType = document.getElementById('serverType').value;
       const loadType = document.getElementById('loadType').value;
-      const latencyThreshold =
-        document.getElementById('latencyThreshold').value;
+      const workerThreads = document.getElementById('workerThreads').value;
       const duration = document.getElementById('duration').value;
       const connections = document.getElementById('connections').value;
       const warmupSeconds = document.getElementById('warmupSeconds').value;
@@ -94,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({
             serverType,
             loadType,
-            latencyThreshold,
+            workerThreads,
             duration,
             connections,
             warmupSeconds,
@@ -172,9 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       const serverType = document.getElementById('batchServerType').value;
-      const latencyThreshold = document.getElementById(
-        'batchLatencyThreshold',
-      ).value;
+      const workerThreads = document.getElementById('batchWorkerThreads').value;
       const duration = document.getElementById('batchDuration').value;
       const connections = document.getElementById('batchConnections').value;
       const warmupSeconds = document.getElementById('batchWarmupSeconds').value;
@@ -197,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             serverType,
-            latencyThreshold,
+            workerThreads,
             duration,
             connections,
             warmupSeconds,

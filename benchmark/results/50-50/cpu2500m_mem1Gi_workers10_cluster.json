@@ -1,0 +1,58 @@
+{
+  "result": {
+    "latencies": "HISTFAAAAVJ4nDXQPWsUURTG8Xt+c4dhGIZ1GJZlWUMQi0X8CBIsLC2DRQqrFBZBLCSFhYhoCqsgImIlwQ9gYSEWwcLCwiJlsBCxsBKxyBcwdxdvc1+e55z7f87Fpy/GlOJLSilSSnVar1hvywv/72dMNNCq5CQ3ubOrMaodhO9haiMPkn3TYk0mhiKNkl6n5nnQeRfmvoa/YdtCW7zJ0iO13lzjcRhUulytpNaukQWz0mVgR2s016PXrgtarQ53VCaqFergMFbHpHNJk+9rtGpJ7ShWwuT819fFNZULwcyzcBI5rWyHlbclxCm16SpNozK6a9PMq8i10ULvpu78YVYYSpMHWoOlncJ8WW3QuOK6pWTLvl5TxjD1J3wMp2HLNZ9C5024bc9Ve254Web1M2yWmN/Ch7BQeehHeMLoODvKzsKkkH8Ot9zTeZ+dhN8ccBx+bfgHzeMyQA==",
+    "requests": "HISTFAAAADN4nJNpmSzMwMAgyMDAwMjAwMDMAAGMYJLfyQHGZ2ZiYmZiYmFiYWFiYGFgY2ECAFvHAh0=",
+    "throughput": "HISTFAAAAEt4nJNpmSzMwMCgxcDAwMjAwMDMAAEgtrhH2QsGGH8uB1M/C9NyHqZOFqbzzEzMTM1MTK1MLK1MLP8ZQTJM55nZGhlZGhmZAI6+C6U=",
+    "totalCompletedRequests": 225,
+    "totalRequests": 255,
+    "totalBytes": 59298,
+    "samples": 20,
+    "errors": 0,
+    "timeouts": 0,
+    "mismatches": 0,
+    "non2xx": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 225
+      }
+    },
+    "resets": 0,
+    "duration": 20.1,
+    "start": "2025-07-06T16:42:00.937Z",
+    "finish": "2025-07-06T16:42:21.041Z",
+    "1xx": 0,
+    "2xx": 225,
+    "3xx": 0,
+    "4xx": 0,
+    "5xx": 0
+  },
+  "warmup": {
+    "latencies": "HISTFAAAAJR4nDWNIQ7CQBQF/5u2bDZlA00VKWgUh+EMnAINDkmqCKKCIAinIAgEQSCRhBMgasmm4ZnJMzPj9bY0s9rMZGaZdVOH6fD/LwkOj7FIjRkJhhFgTisKAhuR48kpaDxnkbAXVAQCSyoGOBqR4XGUOFbCGPGOuIlD9JR8Iaau4iQm7EQtHlHe9vmIFzyVHsW9xw9Ntham",
+    "requests": "HISTFAAAACp4nJNpmSzMwMDAwcDAwMjAwMDMAAGMYJLfyQHGF2RiYGJmYmABAEgWAgQ=",
+    "throughput": "HISTFAAAADF4nJNpmSzMwMDAx8DAwMjAwMDMAAEgtrhH2QsGGH+/EtNkFqZ+NqbzzEwMTACNFgYB",
+    "totalCompletedRequests": 66,
+    "totalRequests": 96,
+    "totalBytes": 17393,
+    "samples": 5,
+    "errors": 0,
+    "timeouts": 0,
+    "mismatches": 0,
+    "non2xx": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 66
+      }
+    },
+    "resets": 0,
+    "duration": 5.03,
+    "start": "2025-07-06T16:41:55.905Z",
+    "finish": "2025-07-06T16:42:00.931Z",
+    "1xx": 0,
+    "2xx": 66,
+    "3xx": 0,
+    "4xx": 0,
+    "5xx": 0
+  },
+  "warmupCliTable": {},
+  "loadTestCliTable": {}
+}

@@ -1,0 +1,58 @@
+{
+  "result": {
+    "latencies": "HISTFAAAASl4nDXPsWtUURDF4TvffS+Px8Osy7KEEFNIWEQWEbGytrBIkXoLEbGwEMFOUgQRIhJEJIhFCqtFtrAKW1hYiYTUIXWwsBLxf9C7i9PMDJz5nTlX9t8PUopnKaVIKdVpWbFs1y7/34+yVpJ1socGSvV8DuehZ4NbntBpfKlMV/S9C5f0ZbnqOwhZXVFz33XjBciWD6HzKWy66zH5381huKF1FNZ8LfShl6HWGRt6sGSq9VVbXoVk4E2YZqNieh5OYiHes15Matt2Crq14XXRJ41GrbeY7rljzdDYxEhb1T6GkV+0Nh2y66KEvelt+aYzj2rdc+0i39US4Xs4DY2ndkz85JHGRXhh4g+zlWWUszBvjAzMwnH41pplB9m8clyZrrrtNz/CX52nMG4=",
+    "requests": "HISTFAAAADJ4nJNpmSzMwMAgwMDAwMjAwMDMAAGMYJLfyQHGZ2JgYmJiYmFgY2FiYGFjZgEAWUgCGQ==",
+    "throughput": "HISTFAAAAEl4nJNpmSzMwMCgycDAwMjAwMDMAAEgtrhH2QsGGJ9pLgdTLwtTOwtTNwvTRBYmppvsLAxMjUxMYKKbhYmpmYmJ5TorCwBknAoW",
+    "totalCompletedRequests": 173,
+    "totalRequests": 204,
+    "totalBytes": 45593,
+    "samples": 20,
+    "errors": 1,
+    "timeouts": 1,
+    "mismatches": 0,
+    "non2xx": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 173
+      }
+    },
+    "resets": 0,
+    "duration": 20.09,
+    "start": "2025-07-06T16:36:57.840Z",
+    "finish": "2025-07-06T16:37:17.931Z",
+    "1xx": 0,
+    "2xx": 173,
+    "3xx": 0,
+    "4xx": 0,
+    "5xx": 0
+  },
+  "warmup": {
+    "latencies": "HISTFAAAAIl4nDWJwQoBURhG/+/899LtJmqSjZKVhaUnVDRKspiFlSwkSZ5gsvIAlvI2mibf5pzTN15VhZltzExmFq2dWswG/955qEQXD/T4ilokHGcpjMyQRMEhwZxSZF6ij3Nu3NiLSGSCN8dWOAUYayfyFvcODzHlKo5iRKJOnMRNLLiIj3gGyswPq6UUfA==",
+    "requests": "HISTFAAAACt4nJNpmSzMwMDAycDAwMjAwMDMAAGMYJLfyQHG52diYGJiZmJgAgBKMQID",
+    "throughput": "HISTFAAAADJ4nJNpmSzMwMDAz8DAwMjAwMDMAAEgtrhH2QsGGH+vAlM7C1MnE1MvG9NVZiYAky0GgQ==",
+    "totalCompletedRequests": 59,
+    "totalRequests": 89,
+    "totalBytes": 15544,
+    "samples": 5,
+    "errors": 0,
+    "timeouts": 0,
+    "mismatches": 0,
+    "non2xx": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 59
+      }
+    },
+    "resets": 0,
+    "duration": 5.09,
+    "start": "2025-07-06T16:36:52.750Z",
+    "finish": "2025-07-06T16:36:57.837Z",
+    "1xx": 0,
+    "2xx": 59,
+    "3xx": 0,
+    "4xx": 0,
+    "5xx": 0
+  },
+  "warmupCliTable": {},
+  "loadTestCliTable": {}
+}

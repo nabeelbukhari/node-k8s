@@ -1,21 +1,22 @@
 const express = require('express');
 const cluster = require('cluster');
-const os = require('os');
+const threadCount = process.env.WORKER_THREADS
+  ? parseInt(process.env.WORKER_THREADS, 10)
+  : require('os').cpus().length;
 const { lightWorkload, heavyWorkload } = require('./workloads');
 
 let ready = false;
 let workers = [];
 if (cluster.isMaster) {
-  const numCPUs = os.cpus().length;
   let onlineWorkers = 0;
   console.log(`Master process is running with pid: ${process.pid}`);
 
   // Fork workers for each CPU
-  for (let i = 0; i < numCPUs; i++) {
+  for (let i = 0; i < threadCount; i++) {
     workers[i] = cluster.fork();
     workers[i].on('online', () => {
       onlineWorkers++;
-      if (onlineWorkers === numCPUs) {
+      if (onlineWorkers === threadCount) {
         ready = true;
         // Notify parent process that server is ready
         process.send && process.send('ready');
@@ -40,7 +41,9 @@ if (cluster.isMaster) {
   });
   const PORT = 4000;
   const server = app.listen(PORT + 1, () => {
-    console.log(`Cluster master health endpoint on port ${PORT + 1}`);
+    console.log(
+      `Cluster master with ${threadCount} workers running health endpoint on port ${PORT + 1}`,
+    );
   });
 
   process.on('message', (msg) => {
@@ -50,7 +53,7 @@ if (cluster.isMaster) {
         'Master server received shutdown signal. Shutting down workers...',
       );
 
-      for (let i = 0; i < numCPUs; i++) {
+      for (let i = 0; i < threadCount; i++) {
         workers[i].send('shutdown');
       }
 

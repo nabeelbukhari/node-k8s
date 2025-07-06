@@ -1,0 +1,58 @@
+{
+  "result": {
+    "latencies": "HISTFAAAAVV4nDXRsWoUcRAG8Pn/dpd1WY71WA45ogQJ4QhHCBYSRCxEUkgIeYAUFiIpLEIQC0khErtgISGItYiktBQRn0C0EZ/AwicQO/nv6cAwMzDzfd/MXH5+2kekbxGRIqKKhaVFmF38X58UQhmlEGWUhShHCmrXhaJUqdVGuTD2K7lvSVO2Co/te5OcJZWJn9w0c5KED0nhllbrNiFDFmWVYcPESC0DzBdME71Wl7lya2XsnqvWy0vmGjbKu6Z2WVHpVHaGzjYL0Vm3Z0lQDPDZx3Z1Cu1AFJqy8cgarpnqHGidJ+f85kD4nHdo/k0/HLIscqy1odbYEXqWBw2HGh+T3siKzqordKZm9q0N9/IiDUuNfEk2HTpN9sxsO3LDst7E3JZNz5I7Ku+T7Xw74cgDL5PG1+Sp3moetuVd8in5njzxipPK29rrsR+VPxccJ8f5AX8BUbot/w==",
+    "requests": "HISTFAAAADR4nJNpmSzMwMAgxMDAwMjAwMDMAAGMYJLfyQHGZ2JlYmZhYGFiY2FhYWViYmJmAgBeeAIo",
+    "throughput": "HISTFAAAAEh4nJNpmSzMwMCgxcDAwMjAwMDMAAEgtrhH2QsGGJ9puwDTRh6Wi6ws7UxM/xmZGKBkMxNLMxPLTVamRkamZkamTmYmAJbOC7k=",
+    "totalCompletedRequests": 237,
+    "totalRequests": 267,
+    "totalBytes": 62447,
+    "samples": 20,
+    "errors": 0,
+    "timeouts": 0,
+    "mismatches": 0,
+    "non2xx": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 237
+      }
+    },
+    "resets": 0,
+    "duration": 20.1,
+    "start": "2025-07-06T16:40:31.858Z",
+    "finish": "2025-07-06T16:40:51.953Z",
+    "1xx": 0,
+    "2xx": 237,
+    "3xx": 0,
+    "4xx": 0,
+    "5xx": 0
+  },
+  "warmup": {
+    "latencies": "HISTFAAAAJx4nDWMMQrCQBQF/5/sBsKyxEW2UyRFsBQrC08g4glSW3oLPYAEtBBLD+EJUliLeABLsbSVEHzNMMW8wbbui8hBRFRErHTTDuPe3++GxFjEEPHmAXNyZjgyIhmWSEnFC54pBXvFGYvnqARwDAl4lpQURBplxUeJ1MqIQMKUq/KFNmqUNYGF2SnCO+UGEy4pGypOSt7+c7b8ALqDFiU=",
+    "requests": "HISTFAAAACd4nJNpmSzMwMDAysDAwMjAwMDMAAGMYJLfyQHGF2diYWUBAEHRAgk=",
+    "throughput": "HISTFAAAADB4nJNpmSzMwMDAy8DAwMjAwMDMAAEgtrhH2QsGGP+2BtNfRiZ2pqtsTAxMAInKBgQ=",
+    "totalCompletedRequests": 72,
+    "totalRequests": 102,
+    "totalBytes": 18977,
+    "samples": 5,
+    "errors": 0,
+    "timeouts": 0,
+    "mismatches": 0,
+    "non2xx": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 72
+      }
+    },
+    "resets": 0,
+    "duration": 5.02,
+    "start": "2025-07-06T16:40:26.829Z",
+    "finish": "2025-07-06T16:40:31.853Z",
+    "1xx": 0,
+    "2xx": 72,
+    "3xx": 0,
+    "4xx": 0,
+    "5xx": 0
+  },
+  "warmupCliTable": {},
+  "loadTestCliTable": {}
+}

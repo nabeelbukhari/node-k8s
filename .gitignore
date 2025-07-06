@@ -137,4 +137,4 @@ dist
 .pnp.*
 
 # results folder
-scripts/benchmark-results
+benchmark/venv

@@ -1,0 +1,58 @@
+{
+  "result": {
+    "latencies": "HISTFAAAASx4nDWQsUoDQRCGZ769jSxHOI8rDlEJIiGFhaS4J7AI4kOIpYWVBLEQEQW1sJAgElKIiISQykIk+AAWVuITBCvrFBYW6lxwt5iZnZmP/9+Fk04momcioiLiZXp0Ghqz//Wd41Tx5SXBkfGkpODZYB0BAp8wUOY4cqwQ03XcKAGPY6h0pnkcORJiHG0aeOq0WCbH4ZDIs8QWGYEM4VpJEGaiYOAqPCuOGp5zgwmLpFxZ51Ut5uXot2mpIjgulToOb82khB4rMfMkbBMo6BsnUIOuoW0nt63UDEXCHk24VVY5ZJNATxF+YM0eHbu8a6l0aJ9T8KCwT0YCTTPvKNghocrI5u6Vghc1Sl8ZV7hQHpUWg4iJcvAnred4q/AFHzAOtJmklubmYOT4BTXKMz4=",
+    "requests": "HISTFAAAADF4nJNpmSzMwMDAz8DAwMjAwMDMAAGMYJLfyQHGZ2FlYmBhYOFiY2ZhYGFmAgBXmgIg",
+    "throughput": "HISTFAAAAEN4nJNpmSzMwMCgxMDAwMjAwMDMAAEgtrhH2QsGGJ9lqwDTfA4mptvsTAxM/xmZWJhAJBPTRDYmpl4WlvPMTAAq3Amc",
+    "totalCompletedRequests": 181,
+    "totalRequests": 211,
+    "totalBytes": 47697,
+    "samples": 20,
+    "errors": 0,
+    "timeouts": 0,
+    "mismatches": 0,
+    "non2xx": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 181
+      }
+    },
+    "resets": 0,
+    "duration": 20.09,
+    "start": "2025-07-06T16:35:28.260Z",
+    "finish": "2025-07-06T16:35:48.351Z",
+    "1xx": 0,
+    "2xx": 181,
+    "3xx": 0,
+    "4xx": 0,
+    "5xx": 0
+  },
+  "warmup": {
+    "latencies": "HISTFAAAAIh4nDWMMQrCQAAEd+cuhnAEDZJOkFQ+w2f4HC20sLAIeYFYWYq1hZVP8AW+QSwECcFthpliZ9tuKmkjyZIyDfOAxeTvl4AoaY1iILELNKyoKMjJYEpXkEgjcYMlsTU1D1NAoOJgGqjJEHtTMiZxMufAJ/ZlztUczZq3ufevvMzTdI7fnB/STxO6",
+    "requests": "HISTFAAAACp4nJNpmSzMwMDAwcDAwMjAwMDMAAGMYJLfyQHG52diYmViYGICAEgZAgQ=",
+    "throughput": "HISTFAAAADJ4nJNpmSzMwMDAz8DAwMjAwMDMAAEgtrhH2QsGGH+/AlMzE9NMDqZuFqaTjEwAk4cGgQ==",
+    "totalCompletedRequests": 61,
+    "totalRequests": 91,
+    "totalBytes": 16083,
+    "samples": 5,
+    "errors": 0,
+    "timeouts": 0,
+    "mismatches": 0,
+    "non2xx": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 61
+      }
+    },
+    "resets": 0,
+    "duration": 5.02,
+    "start": "2025-07-06T16:35:23.235Z",
+    "finish": "2025-07-06T16:35:28.257Z",
+    "1xx": 0,
+    "2xx": 61,
+    "3xx": 0,
+    "4xx": 0,
+    "5xx": 0
+  },
+  "warmupCliTable": {},
+  "loadTestCliTable": {}
+}
