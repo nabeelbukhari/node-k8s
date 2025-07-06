@@ -24,13 +24,13 @@
                 </span>
             </label>
             <select id="loadType" name="loadType" aria-label="Load Type"></select>
-            <label for="latencyThreshold">Latency Threshold (ms):
+            <label for="workerThreads">Worker Threads:
                 <span class="tooltip" tabindex="0">?
-                    <span class="tooltiptext">Maximum acceptable latency in milliseconds.</span>
+                    <span class="tooltiptext">How many threads to use for workers and cluster deployment.</span>
                 </span>
             </label>
-            <input type="number" id="latencyThreshold" name="latencyThreshold" min="1" value="1000"
-                aria-label="Latency Threshold (ms)" />
+            <input type="number" id="workerThreads" name="workerThreads" min="2" max="40" value="2"
+                aria-label="Worker Threads (if applicable)" />
             <label for="duration">Duration (seconds):
                 <span class="tooltip" tabindex="0">?
                     <span class="tooltiptext">How long the benchmark should run.</span>
@@ -70,13 +70,13 @@
                 </span>
             </label>
             <select id="batchServerType" name="batchServerType" aria-label="Batch Server Type"></select>
-            <label for="batchLatencyThreshold">Latency Threshold (ms):
+            <label for="batchWorkerThreads">Worker Threads:
                 <span class="tooltip" tabindex="0">?
-                    <span class="tooltiptext">Maximum acceptable latency in milliseconds.</span>
+                    <span class="tooltiptext">How many threads to use for workers and cluster deployment.</span>
                 </span>
             </label>
-            <input type="number" id="batchLatencyThreshold" name="batchLatencyThreshold" min="1" value="1000"
-                aria-label="Batch Latency Threshold (ms)" />
+            <input type="number" id="batchWorkerThreads" name="batchWorkerThreads" min="2" value="20"
+                aria-label="Worker Threads (if applicable)" />
             <label for="batchDuration">Duration (seconds):
                 <span class="tooltip" tabindex="0">?
                     <span class="tooltiptext">How long the benchmark should run.</span>

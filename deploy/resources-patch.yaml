@@ -9,8 +9,11 @@ spec:
         - name: node-k8s-loadtest
           resources:
             requests:
-              cpu: "1200m"
-              memory: "1Gi"
+              cpu: "500m"
+              memory: "256Mi"
             limits:
-              cpu: "1500m"
-              memory: "1Gi"
+              cpu: "1000m"
+              memory: "512Mi"
+          env:
+            - name: WORKER_THREADS
+              value: "4"

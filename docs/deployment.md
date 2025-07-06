@@ -7,14 +7,16 @@
 - [Kustomize](https://kustomize.io/) (built into kubectl)
 - [Helm](https://helm.sh/) (for Helm-based deployment)
 
+**NOTE: Please ensure that k8s cluster is setup with all CPUs available**
+
 ---
 
 ## Deploying with Kustomize
 
-### 1. Build and Push Docker Image
+### 1. Build Docker Image
 
 ```sh
-npm run docker:build
+npm run docker:local:build
 ```
 
 ### 2. Deploy with Kustomize
@@ -45,10 +47,10 @@ npm run stop:k8s
 
 ## Deploying with Helm
 
-### 1. Build and Push Docker Image
+### 1. Build Docker Image
 
 ```sh
-npm run docker:build
+npm run docker:local:build
 ```
 
 ### 2. Deploy with Helm

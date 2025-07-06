@@ -1,0 +1,58 @@
+{
+  "result": {
+    "latencies": "HISTFAAAAGh4nJNpmSzMwMDgx8DAwMjAwMDKAAGMEEpdAMb/aco0k42J6Tgj02FGJqarLEybIaytTCAey1FGplQmpt0cTJuZmJjWsjKdZGQ6ysh0kJGJGaQqnCmTqZuZiWkzE8tzZqZOLiYApA0TQA==",
+    "requests": "HISTFAAAACt4nJNpmSzMwMDAycDAwMjAwMDMAAGMYJLfyQHGl2FiZmJiYmJlAgBKwQIX",
+    "throughput": "HISTFAAAADR4nJNpmSzMwMAAwowMDAzMDBAAYot7lL1ggPFlelmY1vIwdbMwtbMwTWRhesrJBACrMwcs",
+    "totalCompletedRequests": 34,
+    "totalRequests": 94,
+    "totalBytes": 8965,
+    "samples": 20,
+    "errors": 30,
+    "timeouts": 30,
+    "mismatches": 0,
+    "non2xx": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 34
+      }
+    },
+    "resets": 0,
+    "duration": 21.36,
+    "start": "2025-07-06T16:04:34.890Z",
+    "finish": "2025-07-06T16:04:56.245Z",
+    "1xx": 0,
+    "2xx": 34,
+    "3xx": 0,
+    "4xx": 0,
+    "5xx": 0
+  },
+  "warmup": {
+    "latencies": "HISTFAAAAC94nJNpmSzMwMDAx8DAwMjAwMDKAAGMEEpdAMb/KcJUzLKbkek8N9NsZSYAbYsFdA==",
+    "requests": "HISTFAAAACZ4nJNpmSzMwMDAwsDAwMjAwMDMAAGMYJLfyQHGZ2FhZgIAP1gB7w==",
+    "throughput": "HISTFAAAACp4nJNpmSzMwMDAzsDAwMjAwMDMAAEgtrhH2QsGGJ+ll4VlNQ8TAGBjBGM=",
+    "totalCompletedRequests": 6,
+    "totalRequests": 36,
+    "totalBytes": 1583,
+    "samples": 5,
+    "errors": 0,
+    "timeouts": 0,
+    "mismatches": 0,
+    "non2xx": 0,
+    "statusCodeStats": {
+      "200": {
+        "count": 6
+      }
+    },
+    "resets": 0,
+    "duration": 5.35,
+    "start": "2025-07-06T16:04:29.543Z",
+    "finish": "2025-07-06T16:04:34.888Z",
+    "1xx": 0,
+    "2xx": 6,
+    "3xx": 0,
+    "4xx": 0,
+    "5xx": 0
+  },
+  "warmupCliTable": {},
+  "loadTestCliTable": {}
+}

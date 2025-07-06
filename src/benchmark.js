@@ -1,6 +1,7 @@
 const { spawn } = require('child_process');
 const autocannon = require('autocannon');
 const path = require('path');
+const { defaultWorkerThreads } = require('./servers/config');
 const { serverTypes, loadTypes } = require('./benchmark-config');
 const { sleep } = require('./benchmark-utils');
 
@@ -69,8 +70,15 @@ async function runBenchmark(options) {
 
 // Run both warmup and load-test in a single server lifecycle
 async function runFullBenchmark(options, progressCb) {
-  const { serverType, loadType, duration, connections, warmupSeconds } =
-    options;
+  const {
+    serverType,
+    loadType,
+    workerThreads,
+    duration,
+    connections,
+    warmupSeconds,
+    isCli,
+  } = options;
   const serverChoice =
     serverTypes.find((s) => s.value === serverType) || serverTypes[0];
   const lt = loadTypes.find((l) => l.value === loadType) || loadTypes[0];
@@ -81,9 +89,14 @@ async function runFullBenchmark(options, progressCb) {
   let serverExited = false;
   let serverExitCode = null;
   const serverPath = path.resolve(path.dirname(__filename), serverChoice.path);
-  console.log('[DEBUG] Server path resolved to:', serverPath);
+  const workers =
+    workerThreads || process.env.WORKER_THREADS || defaultWorkerThreads;
+  console.log(
+    `[DEBUG] Server path resolved to:${serverPath}, running with workers: ${workers}`,
+  );
   server = spawn('node', [serverPath], {
     stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
+    env: { ...process.env, WORKER_THREADS: String(workers) },
   });
   server.on('message', function (data) {
     console.log(`[DEBUG] Child process sent: ${data}`);
@@ -118,6 +131,9 @@ async function runFullBenchmark(options, progressCb) {
     throw e;
   }
 
+  // Give server time to stabilize after health check
+  await sleep(1000);
+
   let serverUrl = `http://localhost:${serverChoice.port}/`;
   // Run warmup phase
   let warmupResult = null;
@@ -133,7 +149,7 @@ async function runFullBenchmark(options, progressCb) {
         load: loadChoice.load,
         phaseName: 'Warmup',
       });
-      warmupCliTable = getCliTable(warmupResult);
+      warmupCliTable = isCli ? getCliTable(warmupResult) : {};
       console.log('[DEBUG] Warmup phase complete.');
     } catch (e) {
       console.error('[DEBUG] Warmup phase failed:', e);
@@ -146,7 +162,7 @@ async function runFullBenchmark(options, progressCb) {
     progressCb({
       phase: 'warmup',
       status: 'complete',
-      result: extractSummary(warmupResult),
+      result: warmupResult,
       cliTable: warmupCliTable,
     });
   }
@@ -164,7 +180,7 @@ async function runFullBenchmark(options, progressCb) {
       load: loadChoice.load,
       phaseName: 'Load-test',
     });
-    loadTestCliTable = getCliTable(result);
+    loadTestCliTable = isCli ? getCliTable(result) : {};
     console.log('[DEBUG] Load-test phase complete.');
   } catch (e) {
     console.error('[DEBUG] Load-test phase failed:', e);
@@ -193,13 +209,13 @@ async function runFullBenchmark(options, progressCb) {
     progressCb({
       phase: 'load-test',
       status: 'complete',
-      result: extractSummary(result),
+      result,
       cliTable: loadTestCliTable,
     });
 
   return {
-    warmup: extractSummary(warmupResult),
-    result: extractSummary(result),
+    result,
+    warmup: warmupResult,
     warmupCliTable,
     loadTestCliTable,
   };
@@ -282,46 +298,6 @@ async function runPhase({ url, connections, duration, load, phaseName }) {
       },
     );
   });
-}
-
-// Helper to extract human-readable summary stats from autocannon result
-function extractSummary(result) {
-  return result;
-  if (!result || typeof result !== 'object') return result;
-  // Defensive: ensure all percentiles are present, set to null if missing
-  const latency = result.latency || {};
-  const requests = result.requests || {};
-  const throughput = result.throughput || {};
-  return {
-    averageLatency: latency.average ?? null,
-    p50Latency: latency.p50 ?? null,
-    p90Latency: latency.p90 ?? null,
-    p99Latency: latency.p99 ?? null,
-    minLatency: latency.min ?? null,
-    maxLatency: latency.max ?? null,
-    averageReqPerSec: requests.average ?? null,
-    p50ReqPerSec: requests.p50 ?? null,
-    p90ReqPerSec: requests.p90 ?? null,
-    p99ReqPerSec: requests.p99 ?? null,
-    minReqPerSec: requests.min ?? null,
-    maxReqPerSec: requests.max ?? null,
-    averageThroughput: throughput.average ?? null,
-    p50Throughput: throughput.p50 ?? null,
-    p90Throughput: throughput.p90 ?? null,
-    p99Throughput: throughput.p99 ?? null,
-    minThroughput: throughput.min ?? null,
-    maxThroughput: throughput.max ?? null,
-    totalCompletedRequests: result.totalCompletedRequests,
-    totalRequests: result.totalRequests,
-    totalBytes: result.totalBytes,
-    errors: result.errors,
-    timeouts: result.timeouts,
-    non2xx: result.non2xx,
-    statusCodeStats: result.statusCodeStats,
-    duration: result.duration,
-    start: result.start,
-    finish: result.finish,
-  };
 }
 
 // Helper to get CLI-style table output from autocannon result
